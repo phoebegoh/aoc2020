@@ -1,3 +1,4 @@
+# https://adventofcode.com/2020/day/1
 # Find two entries that sum to 2020 and then multiply those numbers together
 input = []
 with open('input') as f:
