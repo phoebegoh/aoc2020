@@ -68,10 +68,7 @@ def part2():
         if seat2 - seat1 == 2:
             #print("Found a gap between {} and {}".format(seat1,seat2))
             return seat2 - 1
-        
 
-part1()
-part2()
 print(part1())
 print(part2())
 
