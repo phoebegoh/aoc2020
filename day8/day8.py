@@ -1,60 +1,58 @@
 with open('input','r') as f:
     data = f.read().splitlines()
-#ops = [0 for i in range(len(data)-1)]
-#[ [op,arg], [op,arg] ]
 
 # create an array of op,arg
+#[ [op,arg], [op,arg] ]
 instructions = []
 instructions = [line.split() for line in data]
 completed = [0 for x in range(len(instructions))]
 
-print(instructions)
+# 
+def do_wop(arr):
+    action = arr[0]
+    ctr = arr[1]
+    print("Running",action,ctr)
+    if action == "nop":
+        index += 1
+    if action == "jmp":
+        index += ctr
+    if action == "acc":
+        acc += ctr
+        index += ctr
 
-# acc increases accumulator
-# jmp changes instruction
-# nop does nothing
+# Return True if the last command in a program was run
+def is_complete():
+    if completed[-1] == 1:
+        return True
+    return False
 
-def do_op(op,index):
-    acc = 0
-    action = op[0]
-    step = op[1]
-    next_index = index
-
-    print("Before: index:",index,"next index:",next_index,"value:",instructions[index],"action:",action,"step:",step,"state:",completed[index])
-    
+# Return True if this command was already run
+def already_run(index):
     if completed[index] == 1:
-        print("I've run this before! acc:", acc)
-    else:
-        
-        # If this is a nop, do the next instruction
-        if action == 'nop':
-            print("This is a nop")
-            next_index += 1
+        return True
+    return False
 
-        # If this is an acc, increase acc, then do next instruction
-        elif action == 'acc':
-            
-            if (step[0] == '+'):
-                acc += int(step[1:])
-            elif (step[0] == '-'):
-                acc -= int(step[1:])
-        
-            next_index += 1
+index = 0
+acc = 0
+while not is_complete():
 
-        # otherwise, must be a jmp. Do the specified instruction
-        else:
-            if (step[0] == '+'):
-                next_index += int(step[1:])
-            elif (step[0] == '-'):
-                next_index -= int(step[1:])
+    if already_run(index):
+        print("Already run step at position",index)
+        break
 
-        completed[index] = 1
-        print("After: acc:",acc,"index:",index,"next_index:",next_index)
-        print("After: action:",action,"step:",step)
-        print("---")
+    action = instructions[index][0]
+    ctr = int(instructions[index][1])
 
-        return acc + do_op(instructions[next_index],next_index)
+    print("Running index",index,'-',action,ctr)
+    completed[index] = 1
+    if action == "nop":
+        index += 1
+    if action == "jmp":
+        index += ctr
+    if action == "acc":
+        acc += ctr
+        index += 1
+    
+    print(" Acc:",acc)
 
-    return 0
-
-print(do_op(instructions[0],0))
+print("Part 1:",acc)
